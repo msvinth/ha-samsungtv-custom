@@ -18,7 +18,7 @@ class RemoteWebsocket():
 
     def __init__(self, config):
         import websocket
-        self.token_file = os.path.dirname(os.path.realpath(__file__)) + "/token-{}.txt".format(config["host"])
+        self.token_file = os.path.dirname(os.path.realpath(__file__)) + "/.token-{}.txt".format(config["host"])
 
         if not config["port"]:
             config["port"] = 8001
