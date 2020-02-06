@@ -93,12 +93,12 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         hass.data[KNOWN_DEVICES_KEY] = known_devices
 
     uuid = None
-    
+
     if config.get(CONF_SOURCELIST) is not None:
         sourcelist = json.loads(config.get(CONF_SOURCELIST))
     else:
         sourcelist = SOURCES
-        
+
     if config.get(CONF_PROTOCOL) is not None:
         protocol = config.get(CONF_PROTOCOL)
     else:
@@ -138,7 +138,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         #known_devices.add(ip_addr)
 
         token_file = hass.config.path(".token-{}.txt".format(host))
-        
+
         if protocol == "ctl_qled":
             add_entities([SamsungTVDeviceQLED(host, port, name, timeout, mac, uuid, sourcelist, applist, token_file)])
         elif protocol == "ws":
@@ -189,7 +189,7 @@ class SamsungTVDevice(MediaPlayerDevice):
             "timeout": timeout,
         }
         self._sourcelist = sourcelist
-        
+
         if self._config["port"] in (8001, 8002):
             self._config["method"] = "websocket"
         else:
@@ -338,7 +338,7 @@ class SamsungTVDevice(MediaPlayerDevice):
             except vol.Invalid:
                 _LOGGER.error("Media ID must be positive integer")
                 return
-    
+
             for digit in media_id:
                 await self.hass.async_add_job(self.send_key, "KEY_" + digit)
                 await asyncio.sleep(KEY_PRESS_TIMEOUT, self.hass.loop)
@@ -446,7 +446,7 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
         """Create or return an application management object."""
         if self._application is None:
             self._application = self._application_class(self._config)
-        
+
         return self._application
 
     def send_key(self, key):
@@ -543,7 +543,7 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
         source_list = ['TV/HDMI']
         source_list.extend(list(self._sourcelist))
         source_list.extend(list(self._applist))
-        
+
         return source_list
 
     @property
@@ -570,6 +570,7 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
 
     def volume_up(self):
         """Volume up the media player."""
+        #_LOGGER.info(self.get_remote().get_installed_apps())
         self.send_key("KEY_VOLUP")
 
     def volume_down(self):
@@ -651,7 +652,7 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
             self._upnp = self.get_upnp()
             self._upnp.set_current_media(media_id)
             self._upnp.play()
-       
+
         # Launch stream
         elif (media_type == "application/vnd.apple.mpegurl"):
             _LOGGER.error("Playing Stream on TV " + str(media_id))
@@ -683,7 +684,7 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
         if source not in self._sourcelist:
             if source == 'TV/HDMI':
                 self.get_application().stop(self._current_source)
-            else: 
+            else:
                 self.launch_app(source)
         else:
             self.send_key(self._sourcelist[source])
@@ -692,8 +693,8 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
         """Select input source.
         This method must be run in the event loop and returns a coroutine.
         """
-        return self.hass.async_add_job(self.select_source, source) 
-        
+        return self.hass.async_add_job(self.select_source, source)
+
 
 class SamsungTVDeviceWS(MediaPlayerDevice):
     """Representation of a Samsung TV."""
@@ -746,8 +747,8 @@ class SamsungTVDeviceWS(MediaPlayerDevice):
                     self._remote.send_key(key)
                     break
                 except (
-                    ConnectionResetError, 
-                    AttributeError, 
+                    ConnectionResetError,
+                    AttributeError,
                     BrokenPipeError
                 ):
                     self._remote.close()
@@ -863,7 +864,7 @@ class SamsungTVDeviceWS(MediaPlayerDevice):
             except vol.Invalid:
                 _LOGGER.error("Media ID must be positive integer")
                 return
-    
+
             for digit in media_id:
                 await self.hass.async_add_job(self.send_key, "KEY_" + digit)
                 await asyncio.sleep(KEY_PRESS_TIMEOUT, self.hass.loop)

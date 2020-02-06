@@ -6,5 +6,5 @@ media_player:
     port: 8002
     mac: c0:48:e6:4e:55:fa
     timeout: 25
-    applist: "Netflix, Viaplay, YouSee TV og Film, YouTube, Apple TV, Prime Video"
+    applist: "Netflix, Viaplay, YouSee, YouTube, Apple TV, Prime Video"
     protocol: ctl_qled
