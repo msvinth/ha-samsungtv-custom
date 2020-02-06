@@ -136,9 +136,11 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     ip_addr = socket.gethostbyname(host)
     if ip_addr not in known_devices:
         #known_devices.add(ip_addr)
+
+        token_file = hass.config.path(".token-{}.txt".format(host))
         
         if protocol == "ctl_qled":
-            add_entities([SamsungTVDeviceQLED(host, port, name, timeout, mac, uuid, sourcelist, applist)])
+            add_entities([SamsungTVDeviceQLED(host, port, name, timeout, mac, uuid, sourcelist, applist, token_file)])
         elif protocol == "ws":
             add_entities([SamsungTVDeviceWS(host, port, name, timeout, mac, uuid, sourcelist)])
         else:
@@ -362,7 +364,7 @@ class SamsungTVDevice(MediaPlayerDevice):
 class SamsungTVDeviceQLED(MediaPlayerDevice):
     """Representation of a Samsung TV."""
 
-    def __init__(self, host, port, name, timeout, mac, uuid, sourcelist, applist):
+    def __init__(self, host, port, name, timeout, mac, uuid, sourcelist, applist, token_file):
         """Initialize the Samsung device."""
         from .samsungctl_qled import exceptions
         from .samsungctl_qled import Remote
@@ -401,6 +403,7 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
             "port": port,
             "host": host,
             "timeout": timeout,
+            "token_file": token_file
         }
 
         if self._config["port"] in (8001, 8002):
