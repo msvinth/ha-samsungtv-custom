@@ -1,0 +1,10 @@
+default_config:
+media_player:
+  - platform: samsungtv_custom
+    name: "Kontor TV"
+    host: 192.168.1.153
+    port: 8002
+    mac: c0:48:e6:4e:55:fa
+    timeout: 25
+    applist: "Netflix, Viaplay, YouSee TV og Film, YouTube, Apple TV, Prime Video"
+    protocol: ctl_qled
