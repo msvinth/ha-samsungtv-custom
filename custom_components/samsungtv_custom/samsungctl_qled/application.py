@@ -1,4 +1,4 @@
-import os
+import logging
 import json
 import requests
 
@@ -67,11 +67,21 @@ class Application:
 
     def start(self, app):
         """ Start an application."""
-        return os.system("curl -X POST " + APP_URL_FORMAT.format(self._ip, APPS[app]))
+        try:
+            response = requests.post(
+                APP_URL_FORMAT.format(self._ip, APPS[app]), timeout=5
+            )
+        except:
+            _LOGGER.info("Failed to start application")
 
     def stop(self, app):
         """ Stop an application."""
-        return os.system("curl -X DELETE " + APP_URL_FORMAT.format(self._ip, APPS[app]))
+        try:
+            response = requests.delete(
+                APP_URL_FORMAT.format(self._ip, APPS[app]), timeout=5
+            )
+        except:
+            _LOGGER.info("Failed to stop application")
 
     def current_app(self):
         """ Get the current visible app."""
