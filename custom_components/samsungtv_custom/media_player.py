@@ -12,7 +12,7 @@ import time
 import requests
 
 from homeassistant import util
-from homeassistant.components.media_player import MediaPlayerDevice, PLATFORM_SCHEMA
+from homeassistant.components.media_player import MediaPlayerDevice, PLATFORM_SCHEMA, DEVICE_CLASS_TV
 from homeassistant.components.media_player.const import (
     MEDIA_TYPE_CHANNEL,
     SUPPORT_NEXT_TRACK,
@@ -499,6 +499,11 @@ class SamsungTVDeviceQLED(MediaPlayerDevice):
     def name(self):
         """Return the name of the device."""
         return self._name
+
+    @property
+    def device_class(self):
+        """Set the device class to TV."""
+        return DEVICE_CLASS_TV
 
     @property
     def state(self):
